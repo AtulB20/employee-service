@@ -1,2 +1,30 @@
-spring.application.name: employee-api
-server.port: 8111
+spring:
+  application:
+    name: employee-api
+
+server:
+  port: 8111
+
+employee:
+  api:
+    base-url: http://localhost:8112/
+    timeout: 5000
+
+logging:
+  level:
+    com.reliaquest.api: DEBUG
+    org.springframework.web.client: DEBUG
+
+resilience4j.retry:
+  instances:
+    employee-server:
+      maxAttempts: 3
+      waitDuration: 10s
+      enableExponentialBackoff: true
+      exponentialBackoffMultiplier: 2
+      retryExceptions:
+        - org.springframework.web.client.HttpServerErrorException
+        - java.io.IOException
+        - com.reliaquest.api.exception.RateLimitExceededException
+      ignoreExceptions:
+        - com.reliaquest.api.exception.ExternalApiException
