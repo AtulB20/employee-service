@@ -1,6 +1,6 @@
 package com.reliaquest.api.service;
 
-import com.reliaquest.api.model.EmployeeCreateRequest;
+import com.reliaquest.api.model.EmployeeCreateRequestDTO;
 import com.reliaquest.api.model.EmployeeDTO;
 import java.util.List;
 import java.util.UUID;
@@ -17,7 +17,7 @@ public interface EmployeeService {
 
     List<String> getTopTenHighestEarningEmployeeNames();
 
-    EmployeeDTO createEmployee(EmployeeCreateRequest employeeInput);
+    EmployeeDTO createEmployee(EmployeeCreateRequestDTO employeeInput);
 
     String deleteEmployeeById(UUID id);
 }

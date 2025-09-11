@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * Data Transfer Object representing an Employee
- * Used for both API requests and responses with JSON property mapping
+ * Used for API responses from the mock server with JSON property mapping
  */
 @Data
 @Builder

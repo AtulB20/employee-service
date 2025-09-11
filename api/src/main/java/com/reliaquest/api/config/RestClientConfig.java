@@ -23,6 +23,10 @@ public class RestClientConfig {
     @Value("${employee.api.base-url}")
     private String baseUrl;
 
+    /**
+     * Creates a HttpRequestFactory with custom timeout values provided in application config
+     * @return ClientHttpRequestFactory
+     */
     @Bean
     public ClientHttpRequestFactory clientHttpRequestFactory() {
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
@@ -36,6 +40,7 @@ public class RestClientConfig {
      * When HTTP 429 (Too Many Requests) is received, it throws
      * RateLimitExceededException
      * which triggers the retry mechanism configured in Resilience4j.
+     * @return RestClient
      */
     @Bean
     public RestClient restClient() {
@@ -48,6 +53,11 @@ public class RestClientConfig {
                 .build();
     }
 
+    /**
+     * Creates a EmployeeApiClient bean
+     * @param restClient
+     * @return
+     */
     @Bean
     public EmployeeApiClient employeeApiClient(RestClient restClient) {
         RestClientAdapter adapter = RestClientAdapter.create(restClient);

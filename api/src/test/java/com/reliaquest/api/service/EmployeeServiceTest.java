@@ -7,8 +7,9 @@ import static org.mockito.Mockito.*;
 import com.reliaquest.api.client.EmployeeApiClient;
 import com.reliaquest.api.exception.EmployeeNotFoundException;
 import com.reliaquest.api.model.ApiResponse;
-import com.reliaquest.api.model.EmployeeCreateRequest;
+import com.reliaquest.api.model.EmployeeCreateRequestDTO;
 import com.reliaquest.api.model.EmployeeDTO;
+import com.reliaquest.api.model.ExternalEmployeeDTO;
 import com.reliaquest.api.service.impl.EmployeeServiceImpl;
 import java.util.Arrays;
 import java.util.List;
@@ -151,7 +152,7 @@ class EmployeeServiceTest {
     @Test
     void createEmployee_Success() {
         // Given
-        EmployeeCreateRequest request = EmployeeCreateRequest.builder()
+        EmployeeCreateRequestDTO request = EmployeeCreateRequestDTO.builder()
                 .employeeName("New Employee")
                 .employeeSalary(55000)
                 .employeeAge(30)
@@ -161,7 +162,7 @@ class EmployeeServiceTest {
         EmployeeDTO createdEmployee = createTestEmployee(UUID.randomUUID(), "New Employee", 55000);
         ApiResponse<EmployeeDTO> apiResponse = new ApiResponse<>(createdEmployee, "Success");
 
-        when(employeeApiClient.createEmployee(any(EmployeeDTO.class))).thenReturn(apiResponse);
+        when(employeeApiClient.createEmployee(any(ExternalEmployeeDTO.class))).thenReturn(apiResponse);
 
         // When
         EmployeeDTO result = employeeService.createEmployee(request);

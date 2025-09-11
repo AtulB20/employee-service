@@ -7,13 +7,14 @@ server:
 
 employee:
   api:
-    base-url: http://localhost:8112/
+    base-url: http://localhost:8112
     timeout: 5000
 
 logging:
   level:
     com.reliaquest.api: DEBUG
     org.springframework.web.client: DEBUG
+    io.github.resilience4j.retry: DEBUG
 
 resilience4j.retry:
   instances:
@@ -28,3 +29,6 @@ resilience4j.retry:
         - com.reliaquest.api.exception.RateLimitExceededException
       ignoreExceptions:
         - com.reliaquest.api.exception.ExternalApiException
+  configs:
+    default:
+      registerHealthIndicator: true

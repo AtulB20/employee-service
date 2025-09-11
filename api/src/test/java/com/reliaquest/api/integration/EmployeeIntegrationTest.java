@@ -2,7 +2,7 @@ package com.reliaquest.api.integration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.reliaquest.api.model.EmployeeCreateRequest;
+import com.reliaquest.api.model.EmployeeCreateRequestDTO;
 import com.reliaquest.api.model.EmployeeDTO;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,13 @@ import org.springframework.test.context.TestPropertySource;
  * Integration tests for Employee API
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource(properties = {"employee.api.base-url=http://localhost:8112/", "employee.api.timeout=10000"})
+@TestPropertySource(
+        properties = {
+            "employee.api.base-url=http://localhost:8112",
+            "employee.api.timeout=10000",
+            "resilience4j.retry.instances.employee-server.waitDuration=5000ms",
+            "resilience4j.retry.instances.employee-server.maxAttempts=10"
+        })
 class EmployeeIntegrationTest {
 
     @Autowired
@@ -69,7 +75,7 @@ class EmployeeIntegrationTest {
     @Test
     void createEmployee_Integration() {
         // Given
-        EmployeeCreateRequest request = EmployeeCreateRequest.builder()
+        EmployeeCreateRequestDTO request = EmployeeCreateRequestDTO.builder()
                 .employeeName("Integration Test Employee")
                 .employeeSalary(65000)
                 .employeeAge(28)

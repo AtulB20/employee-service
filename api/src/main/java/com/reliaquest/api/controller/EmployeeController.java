@@ -1,6 +1,6 @@
 package com.reliaquest.api.controller;
 
-import com.reliaquest.api.model.EmployeeCreateRequest;
+import com.reliaquest.api.model.EmployeeCreateRequestDTO;
 import com.reliaquest.api.model.EmployeeDTO;
 import com.reliaquest.api.service.EmployeeService;
 import jakarta.validation.Valid;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/employee")
 @RequiredArgsConstructor
-public class EmployeeController implements IEmployeeController<EmployeeDTO, EmployeeCreateRequest> {
+public class EmployeeController implements IEmployeeController<EmployeeDTO, EmployeeCreateRequestDTO> {
 
     private final EmployeeService employeeService;
 
@@ -78,7 +78,7 @@ public class EmployeeController implements IEmployeeController<EmployeeDTO, Empl
     }
 
     @Override
-    public ResponseEntity<EmployeeDTO> createEmployee(@Valid EmployeeCreateRequest employeeInput) {
+    public ResponseEntity<EmployeeDTO> createEmployee(@Valid EmployeeCreateRequestDTO employeeInput) {
         log.info("POST /api/v1/employee - Creating new employee: {}", employeeInput.getEmployeeName());
 
         EmployeeDTO createdEmployee = employeeService.createEmployee(employeeInput);

@@ -4,8 +4,9 @@ import com.reliaquest.api.client.EmployeeApiClient;
 import com.reliaquest.api.exception.EmployeeNotFoundException;
 import com.reliaquest.api.exception.ExternalApiException;
 import com.reliaquest.api.model.ApiResponse;
-import com.reliaquest.api.model.EmployeeCreateRequest;
+import com.reliaquest.api.model.EmployeeCreateRequestDTO;
 import com.reliaquest.api.model.EmployeeDTO;
+import com.reliaquest.api.model.ExternalEmployeeDTO;
 import com.reliaquest.api.service.EmployeeService;
 import io.github.resilience4j.retry.annotation.Retry;
 import java.util.*;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
 /**
- * Service for managing employee operations with the mock API
+ * Service for managing employee operations with the EmployeeApiClient
  */
 @Slf4j
 @Service
@@ -130,17 +131,12 @@ public class EmployeeServiceImpl implements EmployeeService {
      * Creates a new employee
      */
     @Retry(name = EMPLOYEE_SERVER)
-    public EmployeeDTO createEmployee(EmployeeCreateRequest request) {
+    public EmployeeDTO createEmployee(EmployeeCreateRequestDTO request) {
         log.debug("Attempting to create new employee: {}", request.getEmployeeName());
 
-        EmployeeDTO employeeDTO = EmployeeDTO.builder()
-                .name(request.getEmployeeName())
-                .salary(request.getEmployeeSalary())
-                .age(request.getEmployeeAge())
-                .title(request.getEmployeeTitle())
-                .build();
+        ExternalEmployeeDTO employeeForAPI = ExternalEmployeeDTO.fromCreateRequest(request);
 
-        ApiResponse<EmployeeDTO> response = employeeApiClient.createEmployee(employeeDTO);
+        ApiResponse<EmployeeDTO> response = employeeApiClient.createEmployee(employeeForAPI);
 
         if (response != null && response.getData() != null) {
             EmployeeDTO createdEmployee = response.getData();
@@ -156,7 +152,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /**
      * Deletes an employee by ID and returns the employee's name
-     * Note: The mock API uses employee name for deletion, so we need to fetch the employee first
      */
     @Retry(name = EMPLOYEE_SERVER)
     public String deleteEmployeeById(UUID id) {

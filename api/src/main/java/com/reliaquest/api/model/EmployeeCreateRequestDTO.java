@@ -7,9 +7,12 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
+/**
+ * DTO for creating new employees
+ */
 @Data
 @Builder
-public class EmployeeCreateRequest {
+public class EmployeeCreateRequestDTO {
 
     @NotBlank(message = "Name cannot be blank")
     private String employeeName;

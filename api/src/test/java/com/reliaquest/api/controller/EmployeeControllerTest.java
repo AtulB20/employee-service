@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reliaquest.api.exception.EmployeeNotFoundException;
-import com.reliaquest.api.model.EmployeeCreateRequest;
+import com.reliaquest.api.model.EmployeeCreateRequestDTO;
 import com.reliaquest.api.model.EmployeeDTO;
 import com.reliaquest.api.service.EmployeeService;
 import java.util.Arrays;
@@ -124,7 +124,7 @@ class EmployeeControllerTest {
     @Test
     void createEmployee_Success() throws Exception {
         // Given
-        EmployeeCreateRequest request = EmployeeCreateRequest.builder()
+        EmployeeCreateRequestDTO request = EmployeeCreateRequestDTO.builder()
                 .employeeName("New Employee")
                 .employeeSalary(55000)
                 .employeeAge(30)
@@ -132,7 +132,8 @@ class EmployeeControllerTest {
                 .build();
 
         EmployeeDTO createdEmployee = createTestEmployee(UUID.randomUUID(), "New Employee", 55000);
-        when(employeeService.createEmployee(any(EmployeeCreateRequest.class))).thenReturn(createdEmployee);
+        when(employeeService.createEmployee(any(EmployeeCreateRequestDTO.class)))
+                .thenReturn(createdEmployee);
 
         // When & Then
         mockMvc.perform(post("/api/v1/employee")
@@ -147,7 +148,7 @@ class EmployeeControllerTest {
     @Test
     void createEmployee_ValidationError() throws Exception {
         // Given - Invalid request with blank name
-        EmployeeCreateRequest request = EmployeeCreateRequest.builder()
+        EmployeeCreateRequestDTO request = EmployeeCreateRequestDTO.builder()
                 .employeeName("") // Invalid - blank name
                 .employeeSalary(55000)
                 .employeeAge(30)
@@ -164,7 +165,7 @@ class EmployeeControllerTest {
     @Test
     void createEmployee_ValidationError_InvalidAge() throws Exception {
         // Given - Invalid request with age below minimum
-        EmployeeCreateRequest request = EmployeeCreateRequest.builder()
+        EmployeeCreateRequestDTO request = EmployeeCreateRequestDTO.builder()
                 .employeeName("Test Employee")
                 .employeeSalary(55000)
                 .employeeAge(15) // Invalid - below minimum age
@@ -181,7 +182,7 @@ class EmployeeControllerTest {
     @Test
     void createEmployee_ValidationError_InvalidSalary() throws Exception {
         // Given - Invalid request with zero salary
-        EmployeeCreateRequest request = EmployeeCreateRequest.builder()
+        EmployeeCreateRequestDTO request = EmployeeCreateRequestDTO.builder()
                 .employeeName("Test Employee")
                 .employeeSalary(0) // Invalid - must be greater than zero
                 .employeeAge(25)
